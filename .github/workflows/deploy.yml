@@ -1,0 +1,24 @@
+name: Deploy Nodejs Application on AWS EC2 instance- virtual server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 13.239.116.200
+          username: root
+          key: ${{ secrets.SSH_KEY_DEMO }}
+          script: |
+            cd nodejs-app-deloy-github-actions
+            git pull
+            docker compose up -d --build
